@@ -58,7 +58,7 @@ class naiveBayes:
 		for file in aFiles:
 			type = aTitle
 			model['priors'][type] += 1
-			f = open(aTitle + file, 'r')
+			f = open(aTitle + '/' + file, 'r')
 			text = f.read()
 			text = self.preprocess(text)
 			for token in text:
@@ -71,7 +71,7 @@ class naiveBayes:
 		for file in bFiles:
 			type = bTitle
 			model['priors'][type] += 1
-			f = open(bTitle + file, 'r')
+			f = open(bTitle + '/' + file, 'r')
 			text = f.read()
 			text = self.preprocess(text)
 			for token in text:
@@ -90,8 +90,9 @@ class naiveBayes:
 	def testNaiveBayes(self, file, m):
 		valA = 1.0
 		valB = 1.0
-		f = open(file, 'r')
-		text = f.read()
+		#f = open(file, 'r')
+		#text = f.read()
+		text = file
 		text = self.preprocess(text)
 		for token in text:
 

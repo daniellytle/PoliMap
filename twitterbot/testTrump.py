@@ -8,4 +8,4 @@ for file in files:
     f = open('realDonaldTrump/' + file, 'r')
     print ""
     print f.read()
-    print classifier.run('Daily_Good/', 'angry_tweets/', 'realDonaldTrump/'+file)
+    print classifier.run('GOP/', 'TheDemocrats/', 'realDonaldTrump/'+file)

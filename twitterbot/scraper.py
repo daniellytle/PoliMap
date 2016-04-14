@@ -3,6 +3,7 @@ import tweepy
 import sys
 
 query = sys.argv[1]
+numTweets = int(sys.argv[2])
 
 consumer_key = "aWVOGpooY0fUdsM6kWmRPlzLn"
 consumer_secret = "aoqWgsg4DNLfZhXb6DbOe1kXDyHbsSmkDQiy6idZnZnhmVwtJT"
@@ -15,7 +16,7 @@ auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 
-public_tweets = tweepy.Cursor(api.search, q=query).items(10)
-for tweet in public_tweets:
-    print tweet.text
+public_tweets = tweepy.Cursor(api.search, q=query).items(numTweets)
+for x, tweet in enumerate(public_tweets):
+    print x, tweet.text.encode('ascii', 'ignore')
     print ""
