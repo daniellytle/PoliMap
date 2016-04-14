@@ -1,16 +1,25 @@
-# tweetParser.py #
+# handleTweets.py #
 # Alex Quinlan (quinlal) #
 
-import sys, json, os
-from pprint import pprint
+import sys, json, os, requests, time
+from naivebayes import naiveBayes
+from textblob import TextBlob
 
-if len(sys.argv) != 2:
-	print 'wrong number of arguments. proper usage: python tweetParser.py <file-containing tweets>\nExample: python live.py tweets.json'
+if len(sys.argv) != 3:
+	print 'wrong number of arguments. proper usage: python handleTweets.py <file-containing-tweets> <app-server>\nExample: python handleTweets.py tweets.json http://localhost:8888'
 	sys.exit(0)
 
 tweetFile = sys.argv[1]
+server = sys.argv[2]
 
 tweets = open(tweetFile, 'r')
+
+bayes = naiveBayes()
+democrat = os.listdir('democrat/')
+republican = os.listdir('republican/')
+
+# train on scraped deomcrat and republican tweets #
+training = bayes.trainNaiveBayes('democrat', democrat, 'republican', republican)
 
 states = {
 		'AK': 1,'AL': 2,'AR': 3,'AZ': 4,'CA': 5,'CO': 6,'CT': 7,'DE': 8,'FL': 9,'GA': 10,'HI': 11,'IA': 12,'ID': 13,'IL': 14,'IN': 15,
@@ -202,45 +211,57 @@ stateIds = {
 
 for tweet in tweets:
 
-	tweet = tweet.strip()
+    tweet = tweet.strip()
 
-	if tweet is not '':
-		t = json.loads(tweet)
-		place = ''
-		text = ''
-		id = -1
+    if tweet is not '':
+        t = json.loads(tweet)
+        place = ''
+        text = ''
+        id = -1
 
-		if t.get('id'):
-			id = t['id']
+        if t.get('id'):
+            id = t['id']
 
-		if t.get('text'):
-			text = t['text'].encode('ascii', 'ignore')
+        if t.get('text'):
+            text = t['text'].encode('ascii', 'ignore')
 
-		if t.get('place'):
-
-			if t['place']['country_code'].encode('ascii', 'ignore') == 'US':
-				place = t['place']['full_name'].encode('ascii', 'ignore')
-				space = place.rfind(' ') + 1
-				locCode = place[space:]
-				if len(locCode) == 3:
-					locCode = place[:space-2]
-                                location = locCode
-				if locCode not in states:
-                                        if locCode not in statesToAbbrev:
-                                                continue
-					location = statesToAbbrev[locCode]
-				if location in states:
-                                        locId = states[location]
-					stateIds[locId][id] = text
-		else:
-			continue
-
-allTweets = '{'
+        if t.get('place'):
+            if t['place']['country_code'].encode('ascii', 'ignore') == 'US':
+                place = t['place']['full_name'].encode('ascii', 'ignore')
+                space = place.rfind(' ') + 1
+                locCode = place[space:]
+                if len(locCode) == 3:
+                    locCode = place[:space-2]
+                location = locCode
+                if locCode not in states:
+                    if locCode not in statesToAbbrev:
+                        continue
+                    location = statesToAbbrev[locCode]
+                if location in states:
+                    locId = states[location]
+                    stateIds[locId][id] = text
+        else:
+            continue
 
 for x in stateIds:
-        allTweets += '\"' + idToAbbrev[x] + '\": ' + str(stateIds[x]) + ', '
-        #print json.dumps("{\"" + idToState[x] + "\": " + str(stateIds[x]) + '}')
-	#print "STATE: ", idToState[x], ' ID: ', x, "\nTweets: ", stateIds[x]
-allTweets += '}'
 
-print json.dumps(allTweets)
+    state = idToAbbrev[x]
+
+    for y in stateIds[x]:
+        print y
+        tweet = stateIds[x][y]
+        sentiment = TextBlob(tweet)
+        polarity = sentiment.sentiment.polarity
+        classification = bayes.testNaiveBayes(tweet, training)
+        result = 0.0
+        if polarity > 0.0 and classification == 'republican':
+            result = -1.0
+        elif polarity > 0.0 and classification == 'democrat':
+            result = 1.0
+        elif polarity < 0.0 and classification == 'republican':
+            result = 1.0
+        elif polarity < 0.0 and classification == 'democrat':
+            result = -1.0
+
+        z = {'state': state, 'pol': result, 'text': tweet}
+        r = requests.post(server, z)

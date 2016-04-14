@@ -3,6 +3,11 @@ import tweepy
 import sys
 import os
 
+if len(sys.argv) != 5:
+    print 'wrong number of arguments. proper usage: python scraperuser.py <twitter-handle> <party> <num-of-tweets> <offset>\nExample: python scraperuser.py gop republican 500 0'
+    sys.exit(0)
+
+
 userId = sys.argv[1]
 party = sys.argv[2]
 limit = sys.argv[3]
