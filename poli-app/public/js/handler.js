@@ -12,7 +12,7 @@ var options = {
 	colorAxis: {
 		minValue: -1,
 		maxValue: 1,
-		colors: ['#D91E18', '#4183D7']
+		colors: ['#D91E18','white', '#4183D7']
 	}
 };
 var raw = {
