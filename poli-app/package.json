@@ -1,0 +1,12 @@
+{
+  "name": "Soundzy",
+  "version": "1.0.0",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "~4.8.8",
+    "express-handlebars": "^2.0.1",
+    "handlebars": "^4.0.4",
+    "sentiment": "^1.0.6",
+    "socket.io": "^1.4.5"
+  }
+}
