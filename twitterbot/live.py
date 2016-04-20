@@ -10,10 +10,10 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 
 if len(sys.argv) != 2:
-    print 'wrong number of arguments. proper usage: python live.py <time-to-run-in-secs> > tweets.json'
+    print 'wrong number of arguments. proper usage: python live.py <time-to-run-in-secs> > <output-json-file>\n\tExample: python live.py 60 > tweets.json'
     sys.exit(0)
 
-timeToRun = sys.argv[1]
+timeToRun = int(sys.argv[1])
 
 consumer_key = "aWVOGpooY0fUdsM6kWmRPlzLn"
 consumer_secret = "aoqWgsg4DNLfZhXb6DbOe1kXDyHbsSmkDQiy6idZnZnhmVwtJT"
@@ -25,6 +25,7 @@ class StdOutListener(StreamListener):
     """ A listener handles tweets that are received from the stream.
     This is a basic listener that just prints received tweets to stdout.
     """
+    tweets = []
     def on_data(self, data):
 
         # this writes to a json file but no newlines or anything so trying the txt thing again #
@@ -52,41 +53,6 @@ if __name__ == '__main__':
 
     stream = Stream(auth, l)
     tweets = stream.filter(track=keywords, languages=['en'], async=True)
-    time.sleep(int(timeToRun))
+    time.sleep(timeToRun)
     stream.disconnect()
-    #tweets.filter(locations=[-124.77,24.52,-66.95,49.38])
 
-'''
-
-So the above part sets up the stream and reads in tweets, filtered by language, keywords, and then by location (within the US).
-The stuff below was my attempt to get it to return a limited number tweets. 
-or like one tweet every few seconds but I couldn't figure it out. I think it has something to do with setting async=True in filter()
-but like idk how exactly. If you can figure it out that would be dank
-
-'''
-
-'''
-        #tweet = json.loads(data)
-        #text = ''
-        #if tweet.get('text'):
-        #    text = tweet['text'].encode('ascii', 'ignore') + 
-        #if tweet.get('place'):
-        #    print "LOCATION: ", tweet['place'], 
-        #location = tweet['location'].encode('ascii', 'ignore') + 
-        #print text#, location, 
-        # allTweets.append(tweet)
-'''
-
-
-'''
-	while True:
-		if stream.running is True:
-			stream.disconnect()
-			print allTweets.pop()
-		else:
-			print 'Streaming'
-			stream.filter(languages=['en'], track=['trump', 'makeamericagreatagain', 'cruz', 'trump2016', 'kasich'], async=True)
-			print 'here?'
-			#tweets.filter(locations=[-124.77,24.52,-66.95,49.38], async=True)
-		time.sleep(2)
-'''
