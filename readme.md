@@ -2,6 +2,8 @@
 
 Developed by Alex Quinlan, Daniel Wilson, Alex Ottenwess, and Rishin Doshi. This application scrapes tweets, classifies them for political leaning between republican and democratic. A nodejs web server displays a visualization of the results. 
 
+!(Political Tweet Visualization)[https://raw.githubusercontent.com/daniellytle/final_proj/master/Screen%20Shot%202016-04-19%20at%2010.18.28%20PM.png]
+
 # Running the Application
 
 ### Requirements
