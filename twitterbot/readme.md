@@ -16,4 +16,5 @@ python live.py n > output.json
 python handleTweets.py input.json <server-name>
 	
 	ex: python handleTweets.py tweets.json http://localhost:8888/api/tweet
+	OR
 	ex: python handleTweets.py tweets.json http://104.236.24.198:8888/api/tweet
