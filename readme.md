@@ -8,6 +8,13 @@ Developed by Alex Quinlan, Daniel Wilson, Alex Ottenwess, and Rishin Doshi. This
 
 You'll need Nodejs installed.
 
+### Overview
+
+The Application is a built from a web server which listens for tweet requests from a python script. In order to view the demo we presented in class:
+
+* Start the server
+* Run the scripts
+
 # Starting the Server
 
 First get all necessary packages
