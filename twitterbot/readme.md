@@ -15,4 +15,5 @@ python live.py n > output.json
 ## to parse, classify, and send results to server:
 python handleTweets.py input.json <server-name>
 	
-	ex: python handleTweets.py tweets.json http://localhost:8888
+	ex: python handleTweets.py tweets.json http://localhost:8888/api/tweet
+	ex: python handleTweets.py tweets.json http://104.236.24.198:8888/api/tweet
